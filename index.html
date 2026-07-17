@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Receipt System | v3.0</title>
+    <!-- SheetJS Library for Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* --- Advanced CSS Variables --- */
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5A52D5;
+            --primary-light: #8B83FF;
+            --secondary: #FF6B6B;
+            --success: #51CF66;
+            --warning: #FCC419;
+            --info: #4DABF7;
+            --dark: #1E1E2E;
+            --dark-card: #2D2D44;
+            --light: #F8F9FA;
+            --light-card: #FFFFFF;
+            --text-dark: #1E1E2E;
+            --text-light: #F8F9FA;
+            --shadow: 0 8px 32px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- Dark Theme --- */
+        [data-theme="dark"] {
+            --bg: #1A1A2E;
+            --card-bg: #2D2D44;
+            --text: #E4E4E7;
+            --border: #3D3D5C;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        [data-theme="light"] {
+            --bg: #F0F2F5;
+            --card-bg: #FFFFFF;
+            --text: #1A1A2E;
+            --border: #E5E7EB;
+            --shadow: 0 8px 32px rgba(0,0,0,0.08);
+        }
+
+        /* --- Global Reset & Base --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- Scrollbar Styling --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* --- Login Screen --- */
+        .login-container {
+            max-width: 420px;
+            margin: 80px auto 0;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-container h1 {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-container .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+            opacity: 0.7;
+        }
+
+        /* --- Main Layout --- */
+        .main-system {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 24px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- Header --- */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .app-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .app-header .logo i {
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* --- Stats Dashboard --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .stat-card .stat-icon {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-card .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .stat-card .stat-label {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        /* --- Main Content Grid --- */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* --- Form Container --- */
+        .form-container {
+            background: var(--card-bg);
+            padding: 28px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .form-container h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- Enhanced Form --- */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-group input {
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.15);
+        }
+
+        .form-group input:valid {
+            border-color: var(--success);
+        }
+
+        .form-group input:invalid:not(:placeholder-shown) {
+            border-color: var(--secondary);
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .btn-primary { background: var(--primary); }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(108,99,255,0.3); }
+
+        .btn-success { background: var(--success); }
+        .btn-success:hover { background: #45B854; transform: translateY(-2px); }
+
+        .btn-danger { background: var(--secondary); }
+        .btn-danger:hover { background: #E55A5A; transform: translateY(-2px); }
+
+        .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
+        .btn-outline:hover { background: var(--border); }
+
+        .btn-icon { width: 40px; height: 40px; padding: 0; justify-content: center; border-radius: 50%; }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* --- Slip Preview --- */
+        .slip-preview {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            position: sticky;
+            top: 20px;
+        }
+
+        .slip-preview .slip-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 10px;
+            padding: 0 2px;
+        }
+
+        .slip-preview .slip-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid var(--text);
+            font-family: 'Courier New', monospace;
+        }
+
+        .slip-preview .slip-table td {
+            border: 1px solid var(--text);
+            padding: 4px 6px;
+            font-size: 12px;
+            font-weight: bold;
+            word-wrap: break-word;
+        }
+
+        .slip-preview .slip-table .col-num { width: 10%; text-align: center; }
+        .slip-preview .slip-table .col-label { width: 58%; text-align: left; }
+        .slip-preview .slip-table .col-val { width: 32%; text-align: center; }
+
+        .slip-preview .slip-footer {
+            margin-top: 10px;
+            font-size: 11px;
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1.4;
+            font-weight: bold;
+        }
+
+        .slip-preview .slip-signature {
+            text-align: right;
+            margin-top: 4px;
+            font-size: 11px;
+        }
+
+        /* --- Toast Notifications --- */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 14px 20px;
+            border-radius: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            animation: slideInRight 0.4s ease;
+            max-width: 380px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast-success { border-left: 4px solid var(--success); }
+        .toast-error { border-left: 4px solid var(--secondary); }
+        .toast-warning { border-left: 4px solid var(--warning); }
+        .toast-info { border-left: 4px solid var(--info); }
+
+        .toast i { font-size: 20px; }
+        .toast-success i { color: var(--success); }
+        .toast-error i { color: var(--secondary); }
+        .toast-warning i { color: var(--warning); }
+        .toast-info i { color: var(--info); }
+
+        /* --- Modal --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: var(--card-bg);
+            padding: 32px;
+            border-radius: var(--radius);
+            max-width: 420px;
+            width: 90%;
+            border: 1px solid var(--border);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-box h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        .modal-box p {
+            text-align: center;
+            opacity: 0.7;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .modal-box .form-group { margin-bottom: 14px; }
+
+        .modal-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        /* --- Theme Toggle --- */
+        .theme-toggle {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            color: var(--text);
+            font-size: 18px;
+        }
+
+        .theme-toggle:hover { transform: rotate(30deg); }
+
+        /* --- Search & Filter --- */
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: var(--bg);
+            padding: 4px 14px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            padding: 8px 0;
+            color: var(--text);
+            outline: none;
+            width: 180px;
+            font-size: 14px;
+        }
+
+        .search-bar i { opacity: 0.5; }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: 1; }
+            .app-header { flex-direction: column; align-items: stretch; }
+            .header-actions { justify-content: center; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .search-bar input { width: 120px; }
+        }
+
+        @media print {
+            .app-header, .form-container, .stats-grid, .toast-container, .modal-overlay {
+                display: none !important;
+            }
+            .slip-preview {
+                border: none !important;
+                padding: 0 !important;
+                position: static !important;
+            }
+            .main-system { display: block !important; }
+            body { padding: 0 !important; background: white !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div class="login-container" id="loginBox">
+        <h1>📋 Pro Receipt</h1>
+        <p class="subtitle">Secure Inventory Management System v3.0</p>
+        <div id="loginError" style="color: var(--secondary); text-align: center; margin-bottom: 12px; display: none;">Invalid credentials</div>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="username" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:8px;">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+        <div style="text-align:center; margin-top:12px; font-size:12px; opacity:0.5;">
+            Demo: arpit / arpit
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="main-system" id="appInterface">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fas fa-receipt"></i>
+                <span>Pro Receipt</span>
+                <span style="font-size:12px; opacity:0.5; font-weight:400;">v3.0</span>
+            </div>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search records..." oninput="filterRecords()">
+                </div>
+                <button class="btn btn-success" onclick="downloadAndGuide()">
+                    <i class="fas fa-file-excel"></i> Export
+                </button>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Dashboard -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-file-invoice"></i></div>
+                <div class="stat-number" id="totalRecordsDisplay">0</div>
+                <div class="stat-label">Total Records</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                <div class="stat-number" id="todayRecords">0</div>
+                <div class="stat-label">Today's Entries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-boxes"></i></div>
+                <div class="stat-number" id="totalItems">0</div>
+                <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-number" id="lastUpdate">-</div>
+                <div class="stat-label">Last Update</div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Form -->
+            <div class="form-container">
+                <h2><i class="fas fa-pen" style="color:var(--primary);"></i> Entry Form</h2>
+                <form id="invoiceForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label><i class="fas fa-hashtag"></i> Sr. No.</label>
+                            <input type="text" id="srNo" value="558">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-cube"></i> Box Number</label>
+                            <input type="text" id="boxNumber" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-mobile-alt"></i> Mobile</label>
+                            <input type="text" id="mobile" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-camera"></i> Camera</label>
+                            <input type="text" id="camera" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-key"></i> Remote Key</label>
+                            <input type="text" id="remoteKey" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-battery-full"></i> Power Bank</label>
+                            <input type="text" id="powerBank" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-clock"></i> Smart Watch</label>
+                            <input type="text" id="smartWatch" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-headphones"></i> Bluetooth</label>
+                            <input type="text" id="earphone" value="1">
+                        </div>
+                        <div class="form-group full-width">
+                            <label><i class="fas fa-shopping-bag"></i> Bag</label>
+                            <input type="text" id="bag" value="1">
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-primary" onclick="printAndRecord()">
+                            <i class="fas fa-print"></i> Print & Save
+                        </button>
+                        <button type="button" class="btn btn-danger" onclick="openClearModal()">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="refreshExcelStatus()">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Slip Preview -->
+            <div class="slip-preview" id="printableSlip">
+                <div class="slip-header">
+                    <div>Sr. No. - <span id="pSrNo">558</span></div>
+                    <div><span id="pDate">05-07-2026</span></div>
+                </div>
+                <table class="slip-table">
+                    <tr><td class="col-num">1</td><td class="col-label">Mobile :</td><td class="col-val" id="pMobile">-</td></tr>
+                    <tr><td class="col-num">2</td><td class="col-label">Camera :</td><td class="col-val" id="pCamera">-</td></tr>
+                    <tr><td class="col-num">3</td><td class="col-label">Remote key :</td><td class="col-val" id="pRemoteKey">-</td></tr>
+                    <tr><td class="col-num">4</td><td class="col-label">Power bank :</td><td class="col-val" id="pPowerBank">-</td></tr>
+                    <tr><td class="col-num">5</td><td class="col-label">Digital watch :</td><td class="col-val" id="pSmartWatch">-</td></tr>
+                    <tr><td class="col-num">6</td><td class="col-label">Bluetooth :</td><td class="col-val" id="pEarphone">-</td></tr>
+                    <tr><td class="col-num">7</td><td class="col-label">Bag :</td><td class="col-val" id="pBag">-</td></tr>
+                    <tr><td class="col-num">8</td><td class="col-label">Box Number :</td><td class="col-val" id="pBoxNumber">-</td></tr>
+                </table>
+                <div class="slip-footer">સૂચના :<br>આપના સામાનની જવાબદારી<br>આપની પોતાની રહેશે.</div>
+                <div class="slip-signature">- સંચાલક</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear All Modal -->
+    <div class="modal-overlay" id="clearModal">
+        <div class="modal-box">
+            <h3><i class="fas fa-shield-alt"></i> Confirm Clear</h3>
+            <p>Enter your credentials to delete all records</p>
+            <div id="modalError" style="color:var(--secondary); text-align:center; display:none; margin-bottom:12px;">Invalid credentials</div>
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="modalUsername" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="modalPassword" placeholder="Enter password">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeClearModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmClearAll()">Delete All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ============================================================
+        // 🚀 EXTRAORDINARY FEATURES
+        // ============================================================
+
+        // ---------- Configuration ----------
+        const MASTER_FILE_NAME = 'Receipt_Master.xlsx';
+        const EXCEL_PATH = 'C:\\bill\\Receipt_Master.xlsx';
+
+        // ---------- Toast System ----------
+        function showToast(message, type = 'info', duration = 3500) {
+            const container = document.getElementById('toastContainer');
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `<i class="fas ${icons[type]}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100px)';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // ---------- Theme System ----------
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            const icon = document.getElementById('themeIcon');
+            icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('theme', next);
+            showToast(`Switched to ${next} theme`, 'info');
+        }
+
+        // Load saved theme
+        (function loadTheme() {
+            const saved = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', saved);
+            const icon = document.getElementById('themeIcon');
+            icon.className = saved === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        })();
+
+        // ---------- Login ----------
+        function handleLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+
+            if (user === 'arpit' && btoa(pass) === 'YXJwaXQ=') {
+                errorDiv.style.display = 'none';
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('appInterface').style.display = 'block';
+                initializeApp();
+                showToast('Welcome back! 👋', 'success');
+            } else {
+                errorDiv.style.display = 'block';
+                showToast('Invalid credentials!', 'error');
+            }
+        }
+
+        // ---------- Initialize App ----------
+        function initializeApp() {
+            const stored = localStorage.getItem('masterReceiptData');
+            if (!stored || JSON.parse(stored).length === 0) {
+                const sampleData = [{
+                    Date: new Date().toLocaleDateString('en-GB'),
+                    'Sr. No.': '1',
+                    'Box Number': '1',
+                    Mobile: '1',
+                    Camera: '1',
+                    'Remote Key': '1',
+                    'Power Bank': '1',
+                    'Digital/Smart Watch': '1',
+                    'Bluetooth/Earphone': '1',
+                    Bag: '1'
+                }];
+                localStorage.setItem('masterReceiptData', JSON.stringify(sampleData));
+                localStorage.setItem('excelCreatedFlag', 'true');
+            }
+
+            const today = new Date();
+            document.getElementById('pDate').innerText =
+                `${String(today.getDate()).padStart(2,'0')}-${String(today.getMonth()+1).padStart(2,'0')}-${today.getFullYear()}`;
+
+            updateStats();
+            showToast('System ready! 🚀', 'success');
+        }
+
+        // ---------- Stats Dashboard ----------
+        function updateStats() {
+            const stored = localStorage.getItem('masterReceiptData');
+            let data = [];
+            if (stored) {
+                try { data = JSON.parse(stored); } catch(e) {}
+            }
+
+            document.getElementById('totalRecordsDisplay').textContent = data.length;
+
+            // Today's records
+            const today = new Date().toLocaleDateString('en-GB');
+            const todayCount = data.filter(r => r.Date === today).length;
+            document.getElementById('todayRecords').textContent = todayCount;
+
+            // Total items (sum of all quantities)
+            let totalItems = 0;
+            data.forEach(r => {
+                ['Mobile','Camera','Remote Key','Power Bank','Digital/Smart Watch','Bluetooth/Earphone','Bag'].forEach(key => {
+                    const val = parseInt(r[key]);
+                    if (!isNaN(val)) totalItems += val;
+                });
+            });
+            document.getElementById('totalItems').textContent = totalItems;
+
+            // Last update
+            const last = data.length > 0 ? data[data.length-1].Date : '-';
+            document.getElementById('lastUpdate').textContent = last;
+        }
+
+        // ---------- Print & Record ----------
+        function printAndRecord() {
+            const date = document.getElementById('pDate').innerText;
+            const srNo = document.getElementById('srNo').value || '-';
+            const boxNumber = document.getElementById('boxNumber').value || '-';
+            const mobile = document.getElementById('mobile').value || '-';
+            const camera = document.getElementById('camera').value || '-';
+            const remoteKey = document.getElementById('remoteKey').value || '-';
+            const powerBank = document.getElementById('powerBank').value || '-';
+            const smartWatch = document.getElementById('smartWatch').value || '-';
+            const earphone = document.getElementById('earphone').value || '-';
+            const bag = document.getElementById('bag').value || '-';
+
+            // Update preview
+            document.getElementById('pSrNo').innerHTML = srNo;
+            document.getElementById('pMobile').innerHTML = mobile;
+            document.getElementById('pCamera').innerHTML = camera;
+            document.getElementById('pRemoteKey').innerHTML = remoteKey;
+            document.getElementById('pPowerBank').innerHTML = powerBank;
+            document.getElementById('pSmartWatch').innerHTML = smartWatch;
+            document.getElementById('pEarphone').innerHTML = earphone;
+            document.getElementById('pBag').innerHTML = bag;
+            document.getElementById('pBoxNumber').innerHTML = boxNumber;
+
+            // Save
+            appendRecord({
+                Date: date,
+                'Sr. No.': srNo,
+                'Box Number': boxNumber,
+                Mobile: mobile,
+                Camera: camera,
+                'Remote Key': remoteKey,
+                'Power Bank': powerBank,
+                'Digital/Smart Watch': smartWatch,
+                'Bluetooth/Earphone': earphone,
+                Bag: bag
+            });
+
+            window.print();
+            if (!isNaN(srNo)) document.getElementById('srNo').value = parseInt(srNo) + 1;
+
+            updateStats();
+            showToast(`✅ Record #${srNo} saved!`, 'success');
+        }
+
+        // ---------- Append Record ----------
+        function appendRecord(record) {
+            try {
+                let data = [];
+                const stored = localStorage.getItem('masterReceiptData');
+                if (stored) {
+                    try { data = JSON.parse(stored); } catch(e) {}
+                }
+                data.push(record);
+                localStorage.setItem('masterReceiptData', JSON.stringify(data));
+            } catch(e) {
+                showToast('Error saving record!', 'error');
+            }
+        }
+
+        // ---------- Get All Data ----------
+        function getAllData() {
+            const stored = localStorage.getItem('masterReceiptData');
+            if (stored) {
+                try { return JSON.parse(stored); } catch(e) { return []; }
+            }
+            return [];
+        }
+
+        // ---------- Download Excel ----------
+        function downloadExcelFile(data) {
+            if (data.length === 0) {
+                showToast('No records to export!', 'warning');
+                return;
+            }
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(data);
+            XLSX.utils.book_append_sheet(wb, ws, 'Receipt Logs');
+
+            try {
+                XLSX.writeFile(wb, MASTER_FILE_NAME);
+                showToast(`📥 Exported ${data.length} records!`, 'success');
+            } catch(e) {
+                showToast('Error downloading file!', 'error');
+            }
+        }
+
+        function downloadAndGuide() {
+            const data = getAllData();
+            if (data.length === 0) {
+                showToast('No records to export!', 'warning');
+                return;
+            }
+            downloadExcelFile(data);
+            showToast(`💾 Save to: ${EXCEL_PATH}`, 'info', 5000);
+        }
+
+        // ---------- Refresh ----------
+        function refreshExcelStatus() {
+            updateStats();
+            showToast('🔄 Status refreshed!', 'info');
+        }
+
+        // ---------- Search/Filter ----------
+        function filterRecords() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            // This would filter a records table - for demo we just show toast
+            if (query.length > 0) {
+                showToast(`🔍 Searching: "${query}"`, 'info', 2000);
+            }
+        }
+
+        // ---------- Clear All Modal ----------
+        function openClearModal() {
+            document.getElementById('clearModal').classList.add('active');
+            document.getElementById('modalUsername').value = '';
+            document.getElementById('modalPassword').value = '';
+            document.getElementById('modalError').style.display = 'none';
+        }
+
+        function closeClearModal() {
+            document.getElementById('clearModal').classList.remove('active');
+        }
+
+        function confirmClearAll() {
+            const user = document.getElementById('modalUsername').value;
+            const pass = document.getElementById('modalPassword').value;
+            const errorDiv = document.getElementById('modalError');
+
+            if (user === 'arpit' && btoa(pass) === 'YXJwaXQ=') {
+                errorDiv.style.display = 'none';
+                localStorage.setItem('masterReceiptData', JSON.stringify([]));
+                localStorage.setItem('excelCreatedFlag', 'true');
+                updateStats();
+                closeClearModal();
+                showToast('🗑️ All records cleared!', 'warning');
+            } else {
+                errorDiv.style.display = 'block';
+                showToast('Invalid credentials!', 'error');
+            }
+        }
+
+        // ---------- Modal Close on Overlay Click ----------
+        document.getElementById('clearModal').addEventListener('click', function(e) {
+            if (e.target === this) closeClearModal();
+        });
+
+        // ---------- Enter Key Support ----------
+        document.getElementById('modalPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') confirmClearAll();
+        });
+
+        // ---------- Export Functions ----------
+        window.printAndRecord = printAndRecord;
+        window.downloadAndGuide = downloadAndGuide;
+        window.openClearModal = openClearModal;
+        window.closeClearModal = closeClearModal;
+        window.confirmClearAll = confirmClearAll;
+        window.refreshExcelStatus = refreshExcelStatus;
+        window.handleLogin = handleLogin;
+        window.toggleTheme = toggleTheme;
+        window.filterRecords = filterRecords;
+        window.initializeApp = initializeApp;
+
+        console.log('🚀 Pro Receipt System v3.0 loaded!');
+        console.log('📊 Features: Theme toggle, Stats dashboard, Search, Toast notifications');
+        console.log('💾 Data stored in localStorage');
+    </script>
+</body>
+</html>
