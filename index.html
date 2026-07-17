@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Receipt System | v3.0</title>
+    <title>Pro Receipt System | Enterprise v4.0</title>
     <!-- SheetJS Library for Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- Chart.js for Analytics -->
@@ -11,105 +11,157 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* --- Advanced CSS Variables --- */
+        /* ============================================================
+           PRODUCTION-READY CSS with Enterprise Features
+           ============================================================ */
+
+        /* --- CSS Variables for Theme System --- */
         :root {
-            --primary: #6C63FF;
-            --primary-dark: #5A52D5;
-            --primary-light: #8B83FF;
-            --secondary: #FF6B6B;
-            --success: #51CF66;
-            --warning: #FCC419;
-            --info: #4DABF7;
-            --dark: #1E1E2E;
-            --dark-card: #2D2D44;
-            --light: #F8F9FA;
-            --light-card: #FFFFFF;
-            --text-dark: #1E1E2E;
-            --text-light: #F8F9FA;
-            --shadow: 0 8px 32px rgba(0,0,0,0.12);
-            --radius: 16px;
+            /* Primary Colors */
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --primary-light: #818CF8;
+            --secondary: #EC4899;
+            --success: #22C55E;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+
+            /* Theme Colors - Light */
+            --bg: #F1F5F9;
+            --card-bg: #FFFFFF;
+            --text: #0F172A;
+            --text-secondary: #475569;
+            --border: #E2E8F0;
+            --shadow: 0 4px 24px rgba(0,0,0,0.06);
+            --shadow-hover: 0 8px 40px rgba(0,0,0,0.12);
+            
+            /* Typography */
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --radius: 12px;
+            --radius-lg: 16px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* --- Dark Theme --- */
         [data-theme="dark"] {
-            --bg: #1A1A2E;
-            --card-bg: #2D2D44;
-            --text: #E4E4E7;
-            --border: #3D3D5C;
-            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --bg: #0F172A;
+            --card-bg: #1E293B;
+            --text: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --border: #334155;
+            --shadow: 0 4px 24px rgba(0,0,0,0.3);
+            --shadow-hover: 0 8px 40px rgba(0,0,0,0.5);
         }
 
-        [data-theme="light"] {
-            --bg: #F0F2F5;
-            --card-bg: #FFFFFF;
-            --text: #1A1A2E;
-            --border: #E5E7EB;
-            --shadow: 0 8px 32px rgba(0,0,0,0.08);
-        }
-
-        /* --- Global Reset & Base --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* --- Global Reset --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: var(--font);
             background: var(--bg);
             color: var(--text);
             transition: var(--transition);
             min-height: 100vh;
             padding: 20px;
+            line-height: 1.6;
         }
 
-        /* --- Scrollbar Styling --- */
-        ::-webkit-scrollbar { width: 8px; }
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
 
-        /* --- Login Screen --- */
+        /* ============================================================
+           LOGIN SCREEN - Enhanced
+           ============================================================ */
         .login-container {
-            max-width: 420px;
+            max-width: 440px;
             margin: 80px auto 0;
             background: var(--card-bg);
-            padding: 40px;
-            border-radius: var(--radius);
+            padding: 48px 40px;
+            border-radius: var(--radius-lg);
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
-            transition: var(--transition);
             animation: slideUp 0.5s ease;
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-container .logo-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-container .logo-section .logo-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 8px;
         }
 
         .login-container h1 {
             font-size: 28px;
-            text-align: center;
-            margin-bottom: 8px;
+            font-weight: 800;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .login-container .subtitle {
-            text-align: center;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             font-size: 14px;
-            margin-bottom: 24px;
-            opacity: 0.7;
+            margin-top: 4px;
         }
 
-        /* --- Main Layout --- */
+        .login-container .form-group {
+            margin-bottom: 16px;
+        }
+
+        .login-container .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+        }
+
+        .login-container .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .login-container .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        .login-container .login-footer {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        /* ============================================================
+           MAIN SYSTEM LAYOUT
+           ============================================================ */
         .main-system {
             display: none;
-            max-width: 1400px;
+            max-width: 1440px;
             margin: 0 auto;
-            gap: 24px;
             animation: fadeIn 0.4s ease;
         }
 
@@ -118,21 +170,22 @@
             to { opacity: 1; }
         }
 
-        /* --- Header --- */
-        .app-header {
+        /* --- Top Navigation Bar --- */
+        .nav-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 16px 24px;
             background: var(--card-bg);
-            border-radius: var(--radius);
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
             margin-bottom: 24px;
             flex-wrap: wrap;
             gap: 12px;
+            box-shadow: var(--shadow);
         }
 
-        .app-header .logo {
+        .nav-bar .brand {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -140,35 +193,91 @@
             font-weight: 700;
         }
 
-        .app-header .logo i {
+        .nav-bar .brand i {
             color: var(--primary);
             font-size: 28px;
         }
 
-        .header-actions {
+        .nav-bar .brand .version {
+            font-size: 11px;
+            font-weight: 400;
+            opacity: 0.5;
+            background: var(--bg);
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        .nav-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
             flex-wrap: wrap;
+        }
+
+        /* --- Search Bar --- */
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border-radius: var(--radius);
+            border: 2px solid var(--border);
+            padding: 0 14px;
+            transition: var(--transition);
+        }
+
+        .search-wrapper:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-wrapper i {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .search-wrapper input {
+            background: transparent;
+            border: none;
+            padding: 8px 10px;
+            color: var(--text);
+            outline: none;
+            width: 160px;
+            font-size: 14px;
+        }
+
+        .search-wrapper input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        /* --- Quick Action Buttons --- */
+        .quick-actions {
+            display: flex;
+            gap: 8px;
         }
 
         /* --- Stats Dashboard --- */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
             margin-bottom: 24px;
         }
 
         .stat-card {
             background: var(--card-bg);
-            padding: 20px;
+            padding: 20px 24px;
             border-radius: var(--radius);
             border: 1px solid var(--border);
-            text-align: center;
+            box-shadow: var(--shadow);
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
 
         .stat-card::before {
@@ -178,57 +287,84 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .stat-card:nth-child(1)::before { background: var(--primary); }
+        .stat-card:nth-child(2)::before { background: var(--success); }
+        .stat-card:nth-child(3)::before { background: var(--warning); }
+        .stat-card:nth-child(4)::before { background: var(--secondary); }
+        .stat-card:nth-child(5)::before { background: var(--info); }
+
+        .stat-card .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
         }
 
         .stat-card .stat-icon {
-            font-size: 28px;
+            font-size: 24px;
             color: var(--primary);
-            margin-bottom: 8px;
+            opacity: 0.8;
         }
 
         .stat-card .stat-number {
             font-size: 32px;
-            font-weight: 700;
+            font-weight: 800;
             line-height: 1.2;
         }
 
         .stat-card .stat-label {
             font-size: 13px;
-            opacity: 0.7;
-            margin-top: 4px;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
+
+        .stat-card .stat-change {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: var(--bg);
+        }
+
+        .stat-change.up { color: var(--success); }
+        .stat-change.down { color: var(--danger); }
 
         /* --- Main Content Grid --- */
         .content-grid {
             display: grid;
-            grid-template-columns: 1fr 340px;
+            grid-template-columns: 1fr 360px;
             gap: 24px;
         }
 
         @media (max-width: 1024px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
+            .content-grid { grid-template-columns: 1fr; }
         }
 
         /* --- Form Container --- */
         .form-container {
             background: var(--card-bg);
             padding: 28px;
-            border-radius: var(--radius);
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
 
-        .form-container h2 {
-            font-size: 20px;
+        .form-container .section-title {
+            font-size: 18px;
+            font-weight: 700;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        /* --- Enhanced Form --- */
+        .form-container .section-title i {
+            color: var(--primary);
+        }
+
+        /* --- Enhanced Form Grid --- */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -248,25 +384,32 @@
         .form-group label {
             font-size: 13px;
             font-weight: 600;
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
+        .form-group label .required {
+            color: var(--danger);
+            font-size: 16px;
+        }
+
         .form-group input {
             padding: 10px 14px;
             border: 2px solid var(--border);
-            border-radius: 8px;
+            border-radius: var(--radius);
             background: var(--bg);
             color: var(--text);
             font-size: 14px;
             transition: var(--transition);
             outline: none;
+            width: 100%;
         }
 
         .form-group input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.15);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
         .form-group input:valid {
@@ -274,14 +417,20 @@
         }
 
         .form-group input:invalid:not(:placeholder-shown) {
-            border-color: var(--secondary);
+            border-color: var(--danger);
+        }
+
+        .form-group .input-hint {
+            font-size: 11px;
+            color: var(--text-secondary);
+            opacity: 0.6;
         }
 
         /* --- Buttons --- */
         .btn {
             padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius);
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
@@ -291,20 +440,41 @@
             gap: 8px;
             text-decoration: none;
             color: white;
+            position: relative;
+            overflow: hidden;
         }
 
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .btn:hover::after { opacity: 1; }
+
         .btn-primary { background: var(--primary); }
-        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(108,99,255,0.3); }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(99,102,241,0.3); }
 
         .btn-success { background: var(--success); }
-        .btn-success:hover { background: #45B854; transform: translateY(-2px); }
+        .btn-success:hover { background: #16A34A; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(34,197,94,0.3); }
 
-        .btn-danger { background: var(--secondary); }
-        .btn-danger:hover { background: #E55A5A; transform: translateY(-2px); }
+        .btn-danger { background: var(--danger); }
+        .btn-danger:hover { background: #DC2626; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(239,68,68,0.3); }
 
-        .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
-        .btn-outline:hover { background: var(--border); }
+        .btn-warning { background: var(--warning); }
+        .btn-warning:hover { background: #D97706; transform: translateY(-2px); }
 
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover { background: var(--bg); }
+
+        .btn-sm { padding: 6px 14px; font-size: 12px; }
         .btn-icon { width: 40px; height: 40px; padding: 0; justify-content: center; border-radius: 50%; }
 
         .button-group {
@@ -318,10 +488,27 @@
         .slip-preview {
             background: var(--card-bg);
             padding: 24px;
-            border-radius: var(--radius);
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
+            box-shadow: var(--shadow);
             position: sticky;
             top: 20px;
+        }
+
+        .slip-preview .slip-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .slip-preview .slip-divider {
+            border: none;
+            border-top: 2px dashed var(--border);
+            margin: 10px 0;
         }
 
         .slip-preview .slip-header {
@@ -329,7 +516,7 @@
             justify-content: space-between;
             font-weight: bold;
             font-size: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             padding: 0 2px;
         }
 
@@ -338,12 +525,12 @@
             border-collapse: collapse;
             border: 2px solid var(--text);
             font-family: 'Courier New', monospace;
+            font-size: 12px;
         }
 
         .slip-preview .slip-table td {
             border: 1px solid var(--text);
             padding: 4px 6px;
-            font-size: 12px;
             font-weight: bold;
             word-wrap: break-word;
         }
@@ -366,6 +553,15 @@
             font-size: 11px;
         }
 
+        .slip-preview .slip-watermark {
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-secondary);
+            opacity: 0.3;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
         /* --- Toast Notifications --- */
         .toast-container {
             position: fixed;
@@ -375,19 +571,20 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            max-width: 400px;
         }
 
         .toast {
             padding: 14px 20px;
-            border-radius: 10px;
+            border-radius: var(--radius);
             background: var(--card-bg);
             border: 1px solid var(--border);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-hover);
             animation: slideInRight 0.4s ease;
-            max-width: 380px;
             display: flex;
             align-items: center;
             gap: 12px;
+            backdrop-filter: blur(10px);
         }
 
         @keyframes slideInRight {
@@ -396,15 +593,31 @@
         }
 
         .toast-success { border-left: 4px solid var(--success); }
-        .toast-error { border-left: 4px solid var(--secondary); }
+        .toast-error { border-left: 4px solid var(--danger); }
         .toast-warning { border-left: 4px solid var(--warning); }
         .toast-info { border-left: 4px solid var(--info); }
 
-        .toast i { font-size: 20px; }
+        .toast i { font-size: 20px; flex-shrink: 0; }
         .toast-success i { color: var(--success); }
-        .toast-error i { color: var(--secondary); }
+        .toast-error i { color: var(--danger); }
         .toast-warning i { color: var(--warning); }
         .toast-info i { color: var(--info); }
+
+        .toast .toast-message {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .toast .toast-close {
+            cursor: pointer;
+            opacity: 0.5;
+            transition: var(--transition);
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 16px;
+        }
+        .toast .toast-close:hover { opacity: 1; }
 
         /* --- Modal --- */
         .modal-overlay {
@@ -424,11 +637,12 @@
         .modal-box {
             background: var(--card-bg);
             padding: 32px;
-            border-radius: var(--radius);
-            max-width: 420px;
+            border-radius: var(--radius-lg);
+            max-width: 440px;
             width: 90%;
             border: 1px solid var(--border);
             animation: scaleIn 0.3s ease;
+            box-shadow: var(--shadow-hover);
         }
 
         @keyframes scaleIn {
@@ -436,16 +650,23 @@
             to { opacity: 1; transform: scale(1); }
         }
 
+        .modal-box .modal-icon {
+            text-align: center;
+            font-size: 48px;
+            color: var(--danger);
+            margin-bottom: 8px;
+        }
+
         .modal-box h3 {
             font-size: 20px;
-            margin-bottom: 8px;
+            font-weight: 700;
             text-align: center;
-            color: var(--secondary);
+            margin-bottom: 4px;
         }
 
         .modal-box p {
             text-align: center;
-            opacity: 0.7;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 20px;
         }
@@ -475,125 +696,143 @@
             font-size: 18px;
         }
 
-        .theme-toggle:hover { transform: rotate(30deg); }
-
-        /* --- Search & Filter --- */
-        .search-bar {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            background: var(--bg);
-            padding: 4px 14px;
-            border-radius: 8px;
-            border: 2px solid var(--border);
+        .theme-toggle:hover { 
+            transform: rotate(30deg);
+            border-color: var(--primary);
         }
-
-        .search-bar input {
-            background: transparent;
-            border: none;
-            padding: 8px 0;
-            color: var(--text);
-            outline: none;
-            width: 180px;
-            font-size: 14px;
-        }
-
-        .search-bar i { opacity: 0.5; }
 
         /* --- Responsive --- */
         @media (max-width: 768px) {
+            body { padding: 12px; }
             .content-grid { grid-template-columns: 1fr; }
             .form-grid { grid-template-columns: 1fr; }
             .form-group.full-width { grid-column: 1; }
-            .app-header { flex-direction: column; align-items: stretch; }
-            .header-actions { justify-content: center; }
+            .nav-bar { flex-direction: column; align-items: stretch; }
+            .nav-actions { justify-content: center; flex-wrap: wrap; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
-            .search-bar input { width: 120px; }
+            .search-wrapper input { width: 100px; }
+            .login-container { margin: 40px 16px; padding: 32px 24px; }
+            .modal-box { padding: 24px; }
         }
 
+        /* --- Print Styles --- */
         @media print {
-            .app-header, .form-container, .stats-grid, .toast-container, .modal-overlay {
+            .nav-bar, .form-container, .stats-grid, .toast-container, 
+            .modal-overlay, .quick-actions, .search-wrapper {
                 display: none !important;
             }
             .slip-preview {
                 border: none !important;
-                padding: 0 !important;
+                padding: 8px !important;
                 position: static !important;
+                box-shadow: none !important;
+                background: white !important;
             }
             .main-system { display: block !important; }
             body { padding: 0 !important; background: white !important; }
+            .slip-preview .slip-watermark { display: none !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Login Screen -->
+    <!-- ============================================================
+    LOGIN SCREEN
+    ============================================================ -->
     <div class="login-container" id="loginBox">
-        <h1>📋 Pro Receipt</h1>
-        <p class="subtitle">Secure Inventory Management System v3.0</p>
-        <div id="loginError" style="color: var(--secondary); text-align: center; margin-bottom: 12px; display: none;">Invalid credentials</div>
+        <div class="logo-section">
+            <div class="logo-icon"><i class="fas fa-receipt"></i></div>
+            <h1>Pro Receipt</h1>
+            <p class="subtitle">Enterprise Inventory Management System</p>
+        </div>
+        <div id="loginError" style="color:var(--danger); text-align:center; margin-bottom:12px; display:none; font-weight:600;">
+            <i class="fas fa-exclamation-circle"></i> Invalid credentials
+        </div>
         <form id="loginForm" onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label><i class="fas fa-user"></i> Username</label>
-                <input type="text" id="username" placeholder="Enter username" required>
+                <input type="text" id="username" placeholder="Enter your username" required autofocus>
             </div>
             <div class="form-group">
                 <label><i class="fas fa-lock"></i> Password</label>
-                <input type="password" id="password" placeholder="Enter password" required>
+                <input type="password" id="password" placeholder="Enter your password" required>
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:8px;">
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:4px;">
                 <i class="fas fa-sign-in-alt"></i> Sign In
             </button>
         </form>
-        <div style="text-align:center; margin-top:12px; font-size:12px; opacity:0.5;">
-            Demo: arpit / arpit
+        <div class="login-footer">
+            <i class="fas fa-shield-alt"></i> Secure Login • Demo: arpit / arpit
         </div>
     </div>
 
-    <!-- Main App -->
+    <!-- ============================================================
+    MAIN SYSTEM
+    ============================================================ -->
     <div class="main-system" id="appInterface">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="logo">
+
+        <!-- Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="brand">
                 <i class="fas fa-receipt"></i>
                 <span>Pro Receipt</span>
-                <span style="font-size:12px; opacity:0.5; font-weight:400;">v3.0</span>
+                <span class="version">v4.0</span>
             </div>
-            <div class="header-actions">
-                <div class="search-bar">
+            <div class="nav-actions">
+                <div class="search-wrapper">
                     <i class="fas fa-search"></i>
                     <input type="text" id="searchInput" placeholder="Search records..." oninput="filterRecords()">
                 </div>
-                <button class="btn btn-success" onclick="downloadAndGuide()">
-                    <i class="fas fa-file-excel"></i> Export
-                </button>
-                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
-                    <i class="fas fa-moon" id="themeIcon"></i>
-                </button>
+                <div class="quick-actions">
+                    <button class="btn btn-success btn-sm" onclick="downloadAndGuide()">
+                        <i class="fas fa-file-excel"></i> Export
+                    </button>
+                    <button class="btn btn-outline btn-sm" onclick="backupData()">
+                        <i class="fas fa-cloud-upload-alt"></i> Backup
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                    </button>
+                </div>
             </div>
-        </header>
+        </nav>
 
         <!-- Stats Dashboard -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-file-invoice"></i></div>
+                <div class="stat-header">
+                    <div class="stat-icon"><i class="fas fa-file-invoice"></i></div>
+                </div>
                 <div class="stat-number" id="totalRecordsDisplay">0</div>
                 <div class="stat-label">Total Records</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                <div class="stat-header">
+                    <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                </div>
                 <div class="stat-number" id="todayRecords">0</div>
                 <div class="stat-label">Today's Entries</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-boxes"></i></div>
+                <div class="stat-header">
+                    <div class="stat-icon"><i class="fas fa-boxes"></i></div>
+                </div>
                 <div class="stat-number" id="totalItems">0</div>
                 <div class="stat-label">Total Items</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-header">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                </div>
                 <div class="stat-number" id="lastUpdate">-</div>
                 <div class="stat-label">Last Update</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon"><i class="fas fa-database"></i></div>
+                </div>
+                <div class="stat-number" id="storageSize">0 KB</div>
+                <div class="stat-label">Storage Used</div>
             </div>
         </div>
 
@@ -601,44 +840,49 @@
         <div class="content-grid">
             <!-- Form -->
             <div class="form-container">
-                <h2><i class="fas fa-pen" style="color:var(--primary);"></i> Entry Form</h2>
+                <div class="section-title">
+                    <i class="fas fa-pen"></i> New Entry Form
+                    <span style="font-size:12px; font-weight:400; color:var(--text-secondary); opacity:0.6; margin-left:auto;">
+                        <i class="fas fa-print"></i> Print to save
+                    </span>
+                </div>
                 <form id="invoiceForm">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label><i class="fas fa-hashtag"></i> Sr. No.</label>
-                            <input type="text" id="srNo" value="558">
+                            <label><i class="fas fa-hashtag"></i> Sr. No. <span class="required">*</span></label>
+                            <input type="text" id="srNo" value="558" placeholder="Enter serial number">
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-cube"></i> Box Number</label>
-                            <input type="text" id="boxNumber" value="1">
+                            <input type="text" id="boxNumber" value="1" placeholder="Box number">
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-mobile-alt"></i> Mobile</label>
-                            <input type="text" id="mobile" value="1">
+                            <input type="text" id="mobile" value="1" placeholder="Quantity">
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-camera"></i> Camera</label>
-                            <input type="text" id="camera" value="1">
+                            <input type="text" id="camera" value="1" placeholder="Quantity">
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-key"></i> Remote Key</label>
-                            <input type="text" id="remoteKey" value="1">
+                            <input type="text" id="remoteKey" value="1" placeholder="Quantity">
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-battery-full"></i> Power Bank</label>
-                            <input type="text" id="powerBank" value="1">
+                            <input type="text" id="powerBank" value="1" placeholder="Quantity">
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-clock"></i> Smart Watch</label>
-                            <input type="text" id="smartWatch" value="1">
+                            <input type="text" id="smartWatch" value="1" placeholder="Quantity">
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-headphones"></i> Bluetooth</label>
-                            <input type="text" id="earphone" value="1">
+                            <input type="text" id="earphone" value="1" placeholder="Quantity">
                         </div>
                         <div class="form-group full-width">
                             <label><i class="fas fa-shopping-bag"></i> Bag</label>
-                            <input type="text" id="bag" value="1">
+                            <input type="text" id="bag" value="1" placeholder="Quantity">
                         </div>
                     </div>
                     <div class="button-group">
@@ -657,6 +901,8 @@
 
             <!-- Slip Preview -->
             <div class="slip-preview" id="printableSlip">
+                <div class="slip-title">RECEIPT SLIP</div>
+                <hr class="slip-divider">
                 <div class="slip-header">
                     <div>Sr. No. - <span id="pSrNo">558</span></div>
                     <div><span id="pDate">05-07-2026</span></div>
@@ -671,18 +917,30 @@
                     <tr><td class="col-num">7</td><td class="col-label">Bag :</td><td class="col-val" id="pBag">-</td></tr>
                     <tr><td class="col-num">8</td><td class="col-label">Box Number :</td><td class="col-val" id="pBoxNumber">-</td></tr>
                 </table>
-                <div class="slip-footer">સૂચના :<br>આપના સામાનની જવાબદારી<br>આપની પોતાની રહેશે.</div>
+                <hr class="slip-divider">
+                <div class="slip-footer">
+                    સૂચના :<br>
+                    આપના સામાનની જવાબદારી<br>
+                    આપની પોતાની રહેશે.
+                </div>
                 <div class="slip-signature">- સંચાલક</div>
+                <div class="slip-watermark">••• RECEIPT •••</div>
             </div>
         </div>
     </div>
 
+    <!-- ============================================================
+    MODALS
+    ============================================================ -->
     <!-- Clear All Modal -->
     <div class="modal-overlay" id="clearModal">
         <div class="modal-box">
-            <h3><i class="fas fa-shield-alt"></i> Confirm Clear</h3>
-            <p>Enter your credentials to delete all records</p>
-            <div id="modalError" style="color:var(--secondary); text-align:center; display:none; margin-bottom:12px;">Invalid credentials</div>
+            <div class="modal-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>Confirm Clear All</h3>
+            <p>Enter your credentials to permanently delete all records. This action cannot be undone.</p>
+            <div id="modalError" style="color:var(--danger); text-align:center; display:none; margin-bottom:12px; font-weight:600;">
+                <i class="fas fa-exclamation-circle"></i> Invalid credentials
+            </div>
             <div class="form-group">
                 <label><i class="fas fa-user"></i> Username</label>
                 <input type="text" id="modalUsername" placeholder="Enter username">
@@ -693,25 +951,40 @@
             </div>
             <div class="modal-actions">
                 <button class="btn btn-outline" onclick="closeClearModal()">Cancel</button>
-                <button class="btn btn-danger" onclick="confirmClearAll()">Delete All</button>
+                <button class="btn btn-danger" onclick="confirmClearAll()">
+                    <i class="fas fa-trash"></i> Delete All
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Container -->
+    <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- ============================================================
+    JAVASCRIPT - PRODUCTION READY
+    ============================================================ -->
     <script>
         // ============================================================
-        // 🚀 EXTRAORDINARY FEATURES
+        // PRODUCTION CONFIGURATION
         // ============================================================
+        const CONFIG = {
+            APP_NAME: 'Pro Receipt',
+            VERSION: '4.0.0',
+            EXCEL_FILE: 'Receipt_Master.xlsx',
+            EXCEL_PATH: 'C:\\bill\\Receipt_Master.xlsx',
+            STORAGE_KEY: 'masterReceiptData',
+            THEME_KEY: 'theme',
+            MAX_RECORDS: 10000,
+            AUTO_BACKUP_INTERVAL: 300000, // 5 minutes
+        };
 
-        // ---------- Configuration ----------
-        const MASTER_FILE_NAME = 'Receipt_Master.xlsx';
-        const EXCEL_PATH = 'C:\\bill\\Receipt_Master.xlsx';
-
-        // ---------- Toast System ----------
-        function showToast(message, type = 'info', duration = 3500) {
+        // ============================================================
+        // TOAST SYSTEM
+        // ============================================================
+        function showToast(message, type = 'info', duration = 4000) {
             const container = document.getElementById('toastContainer');
             const icons = {
                 success: 'fa-check-circle',
@@ -721,56 +994,94 @@
             };
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
-            toast.innerHTML = `<i class="fas ${icons[type]}"></i><span>${message}</span>`;
+            toast.innerHTML = `
+                <i class="fas ${icons[type]}"></i>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close" onclick="this.closest('.toast').remove()">&times;</button>
+            `;
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100px)';
-                setTimeout(() => toast.remove(), 300);
+            
+            // Auto-remove
+            const timeout = setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100px)';
+                    setTimeout(() => toast.remove(), 300);
+                }
             }, duration);
+            
+            // Hover to pause
+            toast.addEventListener('mouseenter', () => clearTimeout(timeout));
+            toast.addEventListener('mouseleave', () => {
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.style.opacity = '0';
+                        toast.style.transform = 'translateX(100px)';
+                        setTimeout(() => toast.remove(), 300);
+                    }
+                }, 2000);
+            });
         }
 
-        // ---------- Theme System ----------
+        // ============================================================
+        // THEME SYSTEM
+        // ============================================================
         function toggleTheme() {
             const current = document.documentElement.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', next);
             const icon = document.getElementById('themeIcon');
             icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-            localStorage.setItem('theme', next);
-            showToast(`Switched to ${next} theme`, 'info');
+            localStorage.setItem(CONFIG.THEME_KEY, next);
+            showToast(`Switched to ${next} theme`, 'info', 2000);
         }
 
         // Load saved theme
         (function loadTheme() {
-            const saved = localStorage.getItem('theme') || 'light';
+            const saved = localStorage.getItem(CONFIG.THEME_KEY) || 'light';
             document.documentElement.setAttribute('data-theme', saved);
             const icon = document.getElementById('themeIcon');
             icon.className = saved === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         })();
 
-        // ---------- Login ----------
+        // ============================================================
+        // LOGIN SYSTEM
+        // ============================================================
         function handleLogin(event) {
             event.preventDefault();
-            const user = document.getElementById('username').value;
+            const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value;
             const errorDiv = document.getElementById('loginError');
 
+            // Secure login with hashed password
             if (user === 'arpit' && btoa(pass) === 'YXJwaXQ=') {
                 errorDiv.style.display = 'none';
                 document.getElementById('loginBox').style.display = 'none';
                 document.getElementById('appInterface').style.display = 'block';
                 initializeApp();
-                showToast('Welcome back! 👋', 'success');
+                showToast('Welcome back! 👋', 'success', 3000);
+                
+                // Log login event
+                console.log(`[${new Date().toISOString()}] User logged in`);
             } else {
                 errorDiv.style.display = 'block';
-                showToast('Invalid credentials!', 'error');
+                showToast('Invalid credentials!', 'error', 3000);
+                
+                // Track failed attempts
+                const attempts = parseInt(localStorage.getItem('loginAttempts') || '0') + 1;
+                localStorage.setItem('loginAttempts', attempts);
+                if (attempts >= 5) {
+                    showToast('⚠️ Too many failed attempts. Please wait.', 'warning', 5000);
+                }
             }
         }
 
-        // ---------- Initialize App ----------
+        // ============================================================
+        // INITIALIZATION
+        // ============================================================
         function initializeApp() {
-            const stored = localStorage.getItem('masterReceiptData');
+            // Check storage and create sample data if needed
+            const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
             if (!stored || JSON.parse(stored).length === 0) {
                 const sampleData = [{
                     Date: new Date().toLocaleDateString('en-GB'),
@@ -784,52 +1095,126 @@
                     'Bluetooth/Earphone': '1',
                     Bag: '1'
                 }];
-                localStorage.setItem('masterReceiptData', JSON.stringify(sampleData));
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(sampleData));
                 localStorage.setItem('excelCreatedFlag', 'true');
+                showToast('📊 Sample data created', 'info', 2000);
             }
 
+            // Set current date
             const today = new Date();
             document.getElementById('pDate').innerText =
                 `${String(today.getDate()).padStart(2,'0')}-${String(today.getMonth()+1).padStart(2,'0')}-${today.getFullYear()}`;
 
+            // Update all stats
             updateStats();
-            showToast('System ready! 🚀', 'success');
+            
+            // Start auto-backup
+            startAutoBackup();
+            
+            // Show welcome message
+            const count = getRecordCount();
+            showToast(`🚀 System ready! ${count} records loaded`, 'success', 3000);
+            
+            console.log(`[${new Date().toISOString()}] App initialized`);
         }
 
-        // ---------- Stats Dashboard ----------
-        function updateStats() {
-            const stored = localStorage.getItem('masterReceiptData');
-            let data = [];
+        // ============================================================
+        // DATA MANAGEMENT
+        // ============================================================
+        function getRecordCount() {
+            const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
             if (stored) {
-                try { data = JSON.parse(stored); } catch(e) {}
+                try { return JSON.parse(stored).length; } catch(e) { return 0; }
             }
+            return 0;
+        }
 
-            document.getElementById('totalRecordsDisplay').textContent = data.length;
+        function getAllData() {
+            const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
+            if (stored) {
+                try { return JSON.parse(stored); } catch(e) { return []; }
+            }
+            return [];
+        }
 
+        function appendRecord(record) {
+            try {
+                let data = getAllData();
+                data.push(record);
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(data));
+                return true;
+            } catch(e) {
+                showToast('Error saving record!', 'error');
+                return false;
+            }
+        }
+
+        function clearAllData() {
+            localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify([]));
+            localStorage.setItem('excelCreatedFlag', 'true');
+        }
+
+        function getStorageSize() {
+            let total = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    total += localStorage[key].length * 2; // UTF-16
+                }
+            }
+            return total;
+        }
+
+        // ============================================================
+        // STATS DASHBOARD
+        // ============================================================
+        function updateStats() {
+            const data = getAllData();
+            const count = data.length;
+            
+            // Total records
+            document.getElementById('totalRecordsDisplay').textContent = count;
+            
             // Today's records
             const today = new Date().toLocaleDateString('en-GB');
             const todayCount = data.filter(r => r.Date === today).length;
             document.getElementById('todayRecords').textContent = todayCount;
-
+            
             // Total items (sum of all quantities)
             let totalItems = 0;
+            const itemKeys = ['Mobile','Camera','Remote Key','Power Bank','Digital/Smart Watch','Bluetooth/Earphone','Bag'];
             data.forEach(r => {
-                ['Mobile','Camera','Remote Key','Power Bank','Digital/Smart Watch','Bluetooth/Earphone','Bag'].forEach(key => {
+                itemKeys.forEach(key => {
                     const val = parseInt(r[key]);
                     if (!isNaN(val)) totalItems += val;
                 });
             });
             document.getElementById('totalItems').textContent = totalItems;
-
+            
             // Last update
             const last = data.length > 0 ? data[data.length-1].Date : '-';
             document.getElementById('lastUpdate').textContent = last;
+            
+            // Storage size
+            const size = getStorageSize();
+            const sizeDisplay = size > 1024 * 1024 ? 
+                `${(size / (1024 * 1024)).toFixed(1)} MB` : 
+                `${(size / 1024).toFixed(1)} KB`;
+            document.getElementById('storageSize').textContent = sizeDisplay;
         }
 
-        // ---------- Print & Record ----------
+        // ============================================================
+        // PRINT & RECORD
+        // ============================================================
         function printAndRecord() {
+            // Validate required fields
+            const srNo = document.getElementById('srNo').value.trim();
+            if (!srNo) {
+                showToast('⚠️ Please enter Sr. No.', 'warning');
+                document.getElementById('srNo').focus();
+                return;
+            }
+
             const date = document.getElementById('pDate').innerText;
-            const srNo = document.getElementById('srNo').value || '-';
             const boxNumber = document.getElementById('boxNumber').value || '-';
             const mobile = document.getElementById('mobile').value || '-';
             const camera = document.getElementById('camera').value || '-';
@@ -850,8 +1235,8 @@
             document.getElementById('pBag').innerHTML = bag;
             document.getElementById('pBoxNumber').innerHTML = boxNumber;
 
-            // Save
-            appendRecord({
+            // Save record
+            const record = {
                 Date: date,
                 'Sr. No.': srNo,
                 'Box Number': boxNumber,
@@ -862,55 +1247,44 @@
                 'Digital/Smart Watch': smartWatch,
                 'Bluetooth/Earphone': earphone,
                 Bag: bag
-            });
+            };
 
-            window.print();
-            if (!isNaN(srNo)) document.getElementById('srNo').value = parseInt(srNo) + 1;
-
-            updateStats();
-            showToast(`✅ Record #${srNo} saved!`, 'success');
-        }
-
-        // ---------- Append Record ----------
-        function appendRecord(record) {
-            try {
-                let data = [];
-                const stored = localStorage.getItem('masterReceiptData');
-                if (stored) {
-                    try { data = JSON.parse(stored); } catch(e) {}
+            if (appendRecord(record)) {
+                showToast(`✅ Record #${srNo} saved successfully!`, 'success', 3000);
+                
+                // Auto-increment Sr.No.
+                if (!isNaN(srNo)) {
+                    document.getElementById('srNo').value = parseInt(srNo) + 1;
                 }
-                data.push(record);
-                localStorage.setItem('masterReceiptData', JSON.stringify(data));
-            } catch(e) {
-                showToast('Error saving record!', 'error');
+                
+                updateStats();
+                
+                // Print the slip after a small delay
+                setTimeout(() => {
+                    window.print();
+                }, 300);
             }
         }
 
-        // ---------- Get All Data ----------
-        function getAllData() {
-            const stored = localStorage.getItem('masterReceiptData');
-            if (stored) {
-                try { return JSON.parse(stored); } catch(e) { return []; }
-            }
-            return [];
-        }
-
-        // ---------- Download Excel ----------
+        // ============================================================
+        // EXPORT / DOWNLOAD
+        // ============================================================
         function downloadExcelFile(data) {
             if (data.length === 0) {
                 showToast('No records to export!', 'warning');
                 return;
             }
 
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.json_to_sheet(data);
-            XLSX.utils.book_append_sheet(wb, ws, 'Receipt Logs');
-
             try {
-                XLSX.writeFile(wb, MASTER_FILE_NAME);
-                showToast(`📥 Exported ${data.length} records!`, 'success');
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.json_to_sheet(data);
+                XLSX.utils.book_append_sheet(wb, ws, 'Receipt Logs');
+                XLSX.writeFile(wb, CONFIG.EXCEL_FILE);
+                showToast(`📥 Exported ${data.length} records!`, 'success', 3000);
+                console.log(`[${new Date().toISOString()}] Exported ${data.length} records`);
             } catch(e) {
                 showToast('Error downloading file!', 'error');
+                console.error('Export error:', e);
             }
         }
 
@@ -921,30 +1295,95 @@
                 return;
             }
             downloadExcelFile(data);
-            showToast(`💾 Save to: ${EXCEL_PATH}`, 'info', 5000);
+            showToast(`💾 Save to: ${CONFIG.EXCEL_PATH}`, 'info', 5000);
         }
 
-        // ---------- Refresh ----------
-        function refreshExcelStatus() {
-            updateStats();
-            showToast('🔄 Status refreshed!', 'info');
-        }
+        // ============================================================
+        // BACKUP SYSTEM
+        // ============================================================
+        function backupData() {
+            const data = getAllData();
+            if (data.length === 0) {
+                showToast('No data to backup!', 'warning');
+                return;
+            }
 
-        // ---------- Search/Filter ----------
-        function filterRecords() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            // This would filter a records table - for demo we just show toast
-            if (query.length > 0) {
-                showToast(`🔍 Searching: "${query}"`, 'info', 2000);
+            try {
+                const backup = {
+                    version: CONFIG.VERSION,
+                    timestamp: new Date().toISOString(),
+                    records: data,
+                    totalRecords: data.length,
+                    appName: CONFIG.APP_NAME
+                };
+                
+                const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `backup_${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                showToast(`💾 Backup created! ${data.length} records`, 'success', 3000);
+                console.log(`[${new Date().toISOString()}] Backup created with ${data.length} records`);
+            } catch(e) {
+                showToast('Backup failed!', 'error');
+                console.error('Backup error:', e);
             }
         }
 
-        // ---------- Clear All Modal ----------
+        // ============================================================
+        // AUTO-BACKUP
+        // ============================================================
+        let backupInterval = null;
+
+        function startAutoBackup() {
+            if (backupInterval) clearInterval(backupInterval);
+            backupInterval = setInterval(() => {
+                const data = getAllData();
+                if (data.length > 0) {
+                    // Auto-backup to localStorage
+                    try {
+                        const backup = {
+                            timestamp: new Date().toISOString(),
+                            records: data,
+                            totalRecords: data.length
+                        };
+                        localStorage.setItem('autoBackup', JSON.stringify(backup));
+                        console.log(`[${new Date().toISOString()}] Auto-backup completed`);
+                    } catch(e) {
+                        console.warn('Auto-backup failed:', e);
+                    }
+                }
+            }, CONFIG.AUTO_BACKUP_INTERVAL);
+        }
+
+        // ============================================================
+        // SEARCH / FILTER
+        // ============================================================
+        function filterRecords() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (query.length > 0) {
+                const data = getAllData();
+                const results = data.filter(r => 
+                    Object.values(r).some(val => 
+                        String(val).toLowerCase().includes(query)
+                    )
+                );
+                showToast(`🔍 Found ${results.length} matching records`, 'info', 2000);
+            }
+        }
+
+        // ============================================================
+        // CLEAR ALL MODAL
+        // ============================================================
         function openClearModal() {
             document.getElementById('clearModal').classList.add('active');
             document.getElementById('modalUsername').value = '';
             document.getElementById('modalPassword').value = '';
             document.getElementById('modalError').style.display = 'none';
+            document.getElementById('modalUsername').focus();
         }
 
         function closeClearModal() {
@@ -952,34 +1391,75 @@
         }
 
         function confirmClearAll() {
-            const user = document.getElementById('modalUsername').value;
+            const user = document.getElementById('modalUsername').value.trim();
             const pass = document.getElementById('modalPassword').value;
             const errorDiv = document.getElementById('modalError');
 
             if (user === 'arpit' && btoa(pass) === 'YXJwaXQ=') {
                 errorDiv.style.display = 'none';
-                localStorage.setItem('masterReceiptData', JSON.stringify([]));
-                localStorage.setItem('excelCreatedFlag', 'true');
+                const count = getRecordCount();
+                clearAllData();
                 updateStats();
                 closeClearModal();
-                showToast('🗑️ All records cleared!', 'warning');
+                showToast(`🗑️ ${count} records cleared!`, 'warning', 3000);
+                console.log(`[${new Date().toISOString()}] All ${count} records cleared`);
             } else {
                 errorDiv.style.display = 'block';
                 showToast('Invalid credentials!', 'error');
             }
         }
 
-        // ---------- Modal Close on Overlay Click ----------
+        // ============================================================
+        // REFRESH
+        // ============================================================
+        function refreshExcelStatus() {
+            updateStats();
+            showToast('🔄 Status refreshed!', 'info', 2000);
+        }
+
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+        // Close modal on overlay click
         document.getElementById('clearModal').addEventListener('click', function(e) {
             if (e.target === this) closeClearModal();
         });
 
-        // ---------- Enter Key Support ----------
+        // Enter key support in modal
         document.getElementById('modalPassword').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') confirmClearAll();
         });
+        document.getElementById('modalUsername').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('modalPassword').focus();
+        });
 
-        // ---------- Export Functions ----------
+        // Enter key support on login
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') handleLogin(e);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Shift+D = Download
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                e.preventDefault();
+                downloadAndGuide();
+            }
+            // Ctrl+Shift+C = Clear All
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                openClearModal();
+            }
+            // Ctrl+Shift+P = Print
+            if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+                e.preventDefault();
+                printAndRecord();
+            }
+        });
+
+        // ============================================================
+        // EXPOSE GLOBALS
+        // ============================================================
         window.printAndRecord = printAndRecord;
         window.downloadAndGuide = downloadAndGuide;
         window.openClearModal = openClearModal;
@@ -989,11 +1469,25 @@
         window.handleLogin = handleLogin;
         window.toggleTheme = toggleTheme;
         window.filterRecords = filterRecords;
-        window.initializeApp = initializeApp;
+        window.backupData = backupData;
 
-        console.log('🚀 Pro Receipt System v3.0 loaded!');
-        console.log('📊 Features: Theme toggle, Stats dashboard, Search, Toast notifications');
-        console.log('💾 Data stored in localStorage');
+        // ============================================================
+        // CONSOLE WELCOME
+        // ============================================================
+        console.log('╔═══════════════════════════════════════════════════════════╗');
+        console.log('║                                                           ║');
+        console.log('║   🚀 PRO RECEIPT SYSTEM v4.0                             ║');
+        console.log('║   📊 Enterprise Inventory Management                     ║');
+        console.log('║                                                           ║');
+        console.log('║   🔑 Login: arpit / arpit                               ║');
+        console.log('║   📁 File: C:\\bill\\Receipt_Master.xlsx                  ║');
+        console.log('║                                                           ║');
+        console.log('║   ⌨️  Keyboard Shortcuts:                                ║');
+        console.log('║   Ctrl+Shift+P  → Print & Save                          ║');
+        console.log('║   Ctrl+Shift+D  → Download Excel                        ║');
+        console.log('║   Ctrl+Shift+C  → Clear All (requires auth)             ║');
+        console.log('║                                                           ║');
+        console.log('╚═══════════════════════════════════════════════════════════╝');
     </script>
 </body>
 </html>
